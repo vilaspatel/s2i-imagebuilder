@@ -69,7 +69,7 @@ execute_maven_build_src2()
   cp -v $HOME/service/target/*.* $DEPLOY_DIR 
   
   echo "list Home dir files"
-  ls -la $HOME/target
+  ls -la $HOME/service/target
   echo "list Deploy dir files"
   ls -la $DEPLOY_DIR 
  
@@ -153,7 +153,7 @@ if [ $(ls $DEPLOY_DIR/*.jar | wc -l) -eq 1 ]; then
   echo "---> Application deployed successfully.  jar file is located in $DEPLOY_DIR/app.jar"
 elif [ $(ls $DEPLOY_DIR/*.war | wc -l) -eq 1 ]; then
   mv $DEPLOY_DIR/*.war $DEPLOY_DIR/app.war
-  [ ! -f $DEPLOY_DIR/app.jar ] && echo "Application could not be properly built." && exit 1 
+  [ ! -f $DEPLOY_DIR/app.war ] && echo "Application could not be properly built." && exit 1 
   echo "---> Application deployed successfully.  war file is located in $DEPLOY_DIR/app.war"
   else
   exit 1
