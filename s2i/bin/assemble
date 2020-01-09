@@ -10,11 +10,11 @@
 #HOME directory of base image =>  HOME=/home/jboss
 #HOME=/home/jboss
 
-execute_maven_build()
+execute_maven_build_src()
 {
   echo "---> Building application using Maven ..."
 
-  MAVEN_ARGS="package -DskipTests ${MAVEN_ARGS_APPEND}"
+  MAVEN_ARGS="package -DskipTests=true"
   echo "---> Found pom.xml.  Attempting to build with 'mvn ${MAVEN_ARGS}'"
 
   echo "---> Using $(mvn --version)"
@@ -45,6 +45,43 @@ execute_maven_build()
     rm -rf $HOME/.m2/repository
   fi
 }
+execute_maven_build_src2()
+{
+  echo "---> Building application using Maven ..."
+
+  MAVEN_ARGS="package -DskipTests=true"
+  echo "---> Found pom.xml.  Attempting to build with 'mvn ${MAVEN_ARGS}'"
+
+  echo "---> Using $(mvn --version)"
+
+  # Execute the actual build
+  cd $HOME/service
+  mvn -e $MAVEN_ARGS
+
+  ERR=$?
+  if [ $ERR -ne 0 ]; then
+    echo "Aborting due to error code $ERR from Maven build"
+    exit $ERR
+  fi
+
+  # Copy built artifacts (if any!) from the target/ directory
+  # to the $DEPLOY_DIR directory for later deployment
+  cp -v $HOME/target/*.* $DEPLOY_DIR 
+  
+  echo "list Home dir files"
+  ls -la $HOME/target
+  echo "list Deploy dir files"
+  ls -la $DEPLOY_DIR 
+ 
+  # Clean up after Maven run ....
+  echo "Clean up after Maven run"
+  mvn clean
+
+  if [ -d "$HOME/.m2/repository" ]; then
+    rm -rf $HOME/.m2/repository
+  fi
+}
+
 
 execute_gradle_build()
 {
@@ -102,9 +139,9 @@ echo "---> Copied application source to $HOME ..."
 ls -la $HOME
 echo "---> S2I:assemble Build type=$BUILD_TYPE ..."
 if [ $BUILD_TYPE = "Maven" ] && [ -f "$HOME/pom.xml" ]; then
-  execute_maven_build
+  execute_maven_build_src
 elif [ $BUILD_TYPE = "Maven" ] && [ -f "$HOME/service/pom.xml" ]; then
-  execute_gradle_build
+  execute_maven_build_src2
 else
   # Copy the fat jar to the deployment directory
   cp -v $HOME/*.jar $DEPLOY_DIR 
