@@ -8,6 +8,7 @@ MAINTAINER vilas
 
 # Builder version
 ENV BUILDER_VERSION 1.0
+ENV  S2I_SOURCE_DEPLOYMENTS_FILTER=*.war
 
 LABEL io.k8s.description="Platform for building Spring Boot applications with maven or gradle" \
       io.k8s.display-name="Spring Boot builder 1.0" \
