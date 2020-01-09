@@ -66,7 +66,7 @@ execute_maven_build_src2()
 
   # Copy built artifacts (if any!) from the target/ directory
   # to the $DEPLOY_DIR directory for later deployment
-  cp -v $HOME/target/*.* $DEPLOY_DIR 
+  cp -v $HOME/service/target/*.* $DEPLOY_DIR 
   
   echo "list Home dir files"
   ls -la $HOME/target
