@@ -103,7 +103,7 @@ ls -la $HOME
 echo "---> S2I:assemble Build type=$BUILD_TYPE ..."
 if [ $BUILD_TYPE = "Maven" ] && [ -f "$HOME/pom.xml" ]; then
   execute_maven_build
-elif [ $BUILD_TYPE = "Gradle" ] && [ -f "$HOME/build.gradle" ]; then
+elif [ $BUILD_TYPE = "Maven" ] && [ -f "$HOME/service/pom.xml" ]; then
   execute_gradle_build
 else
   # Copy the fat jar to the deployment directory
